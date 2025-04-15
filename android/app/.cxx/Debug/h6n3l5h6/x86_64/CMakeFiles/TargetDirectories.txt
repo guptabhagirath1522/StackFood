@@ -1,0 +1,2 @@
+C:/Users/Bhagi/OneDrive/Desktop/User app and web/User app and web/android/app/.cxx/Debug/h6n3l5h6/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Bhagi/OneDrive/Desktop/User app and web/User app and web/android/app/.cxx/Debug/h6n3l5h6/x86_64/CMakeFiles/rebuild_cache.dir

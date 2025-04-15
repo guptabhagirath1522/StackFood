@@ -1,0 +1,2 @@
+/Users/6amtech/Documents/6amtech/StackFood/StackFood-User-App/android/app/.cxx/Debug/5m26594o/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/6amtech/Documents/6amtech/StackFood/StackFood-User-App/android/app/.cxx/Debug/5m26594o/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+/Users/6amtech/Documents/6amtech/StackFood/StackFood-User-App/build/app/intermediates/cxx/RelWithDebInfo/3f1l1z4e/obj/arm64-v8a

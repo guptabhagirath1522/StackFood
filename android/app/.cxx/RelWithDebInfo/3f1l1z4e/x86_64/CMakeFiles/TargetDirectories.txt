@@ -1,0 +1,2 @@
+/Users/6amtech/Documents/6amtech/StackFood/StackFood-User-App/android/app/.cxx/RelWithDebInfo/3f1l1z4e/x86_64/CMakeFiles/edit_cache.dir
+/Users/6amtech/Documents/6amtech/StackFood/StackFood-User-App/android/app/.cxx/RelWithDebInfo/3f1l1z4e/x86_64/CMakeFiles/rebuild_cache.dir
