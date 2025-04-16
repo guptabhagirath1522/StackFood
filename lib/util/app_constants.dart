@@ -8,9 +8,11 @@ class AppConstants {
 
   static const String fontFamily = 'Roboto';
   static const bool payInWevView = false;
-  static const String webHostedUrl = 'https://food.harshitait.i';
+  // static const String webHostedUrl = 'https://stackfood-web.6amtech.com';
+  static const String webHostedUrl = 'https://food.harshitait.in';
   static const bool useReactWebsite = false;
 
+  // static const String baseUrl = 'https://stackfood-admin.6amtech.com';
   static const String baseUrl = 'https://food.harshitait.in';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
