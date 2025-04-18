@@ -8,7 +8,7 @@ import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class VerificationRepo implements VerificationRepoInterface{
+class VerificationRepo implements VerificationRepoInterface {
   final ApiClient apiClient;
   final SharedPreferences sharedPreferences;
 
@@ -16,7 +16,9 @@ class VerificationRepo implements VerificationRepoInterface{
 
   @override
   Future<ResponseModel> forgetPassword(String? phone) async {
-    Response response = await apiClient.postData(AppConstants.forgetPasswordUri, {"phone": phone}, handleError: false);
+    Response response = await apiClient.postData(
+        AppConstants.forgetPasswordUri, {"phone": phone},
+        handleError: false);
     if (response.statusCode == 200) {
       return ResponseModel(true, response.body["message"]);
     } else {
@@ -26,7 +28,10 @@ class VerificationRepo implements VerificationRepoInterface{
 
   @override
   Future<ResponseModel> verifyToken(String? phone, String token) async {
-    Response response = await apiClient.postData(AppConstants.verifyTokenUri, {"phone": phone, "reset_token": token}, handleError: false);
+    print("token: $token");
+    Response response = await apiClient.postData(
+        AppConstants.verifyTokenUri, {"phone": phone, "reset_token": token},
+        handleError: false);
     if (response.statusCode == 200) {
       return ResponseModel(true, response.body["message"]);
     } else {
@@ -35,10 +40,17 @@ class VerificationRepo implements VerificationRepoInterface{
   }
 
   @override
-  Future<ResponseModel> resetPassword(String? resetToken, String number, String password, String confirmPassword) async {
+  Future<ResponseModel> resetPassword(String? resetToken, String number,
+      String password, String confirmPassword) async {
     Response response = await apiClient.postData(
       AppConstants.resetPasswordUri,
-      {"_method": "put", "reset_token": resetToken, "phone": number, "password": password, "confirm_password": confirmPassword},
+      {
+        "_method": "put",
+        "reset_token": resetToken,
+        "phone": number,
+        "password": password,
+        "confirm_password": confirmPassword
+      },
       handleError: false,
     );
     if (response.statusCode == 200) {
@@ -50,7 +62,9 @@ class VerificationRepo implements VerificationRepoInterface{
 
   @override
   Future<ResponseModel> checkEmail(String email) async {
-    Response response = await apiClient.postData(AppConstants.checkEmailUri, {"email": email}, handleError: false);
+    Response response = await apiClient.postData(
+        AppConstants.checkEmailUri, {"email": email},
+        handleError: false);
     if (response.statusCode == 200) {
       return ResponseModel(true, response.body["token"]);
     } else {
@@ -60,42 +74,57 @@ class VerificationRepo implements VerificationRepoInterface{
 
   @override
   Future<Response> verifyEmail(String email, String token) async {
-    return await apiClient.postData(AppConstants.verifyEmailUri, {"email": email, "token": token}, handleError: false);
+    return await apiClient.postData(
+        AppConstants.verifyEmailUri, {"email": email, "token": token},
+        handleError: false);
   }
 
   @override
   Future<Response> verifyPhone(VerificationDataModel data) async {
-    return await apiClient.postData(AppConstants.verifyPhoneUri, data.toJson(), handleError: false);
+    return await apiClient.postData(AppConstants.verifyPhoneUri, data.toJson(),
+        handleError: false);
   }
 
   @override
-  Future<ResponseModel> verifyFirebaseOtp({required String phoneNumber, required String session, required String otp, required String loginType}) async {
+  Future<ResponseModel> verifyFirebaseOtp(
+      {required String phoneNumber,
+      required String session,
+      required String otp,
+      required String loginType}) async {
     String guestId = AuthHelper.getGuestId();
     Map<String, dynamic> data = {
-      'session_info' : session,
-      'phone' : phoneNumber,
-      'otp' : otp,
-      'login_type' : loginType,
+      'session_info': session,
+      'phone': phoneNumber,
+      'otp': otp,
+      'login_type': loginType,
     };
-    if(guestId.isNotEmpty) {
+    if (guestId.isNotEmpty) {
       data.addAll({"guest_id": guestId});
     }
-    Response response = await apiClient.postData(AppConstants.firebaseAuthVerify, data);
+    Response response =
+        await apiClient.postData(AppConstants.firebaseAuthVerify, data);
     if (response.statusCode == 200) {
-      AuthResponseModel authResponse = AuthResponseModel.fromJson(response.body);
-      return ResponseModel(true, response.body["message"], authResponseModel: authResponse);
+      AuthResponseModel authResponse =
+          AuthResponseModel.fromJson(response.body);
+      return ResponseModel(true, response.body["message"],
+          authResponseModel: authResponse);
     } else {
       return ResponseModel(false, response.statusText);
     }
   }
 
   @override
-  Future<ResponseModel> verifyForgetPassFirebaseOtp({required String phoneNumber, required String session, required String otp}) async {
-    Response response = await apiClient.postData(AppConstants.firebaseResetPassword,
-      {'sessionInfo' : session,
-        'phoneNumber' : phoneNumber,
-        'code' : otp,
-        'is_reset_token' : 1,
+  Future<ResponseModel> verifyForgetPassFirebaseOtp(
+      {required String phoneNumber,
+      required String session,
+      required String otp}) async {
+    Response response = await apiClient.postData(
+      AppConstants.firebaseResetPassword,
+      {
+        'sessionInfo': session,
+        'phoneNumber': phoneNumber,
+        'code': otp,
+        'is_reset_token': 1,
         '_method': 'PUT'
       },
     );
