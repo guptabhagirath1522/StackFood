@@ -49,26 +49,36 @@ Future<void> main() async {
 
   DeepLinkBody? linkBody;
 
-  if (GetPlatform.isWeb) {
-    await Firebase.initializeApp(
+  try {
+    if (GetPlatform.isWeb) {
+      await Firebase.initializeApp(
+          options: const FirebaseOptions(
+        apiKey: 'AIzaSyAeBvXjTdJGACPYEGfXBThsOiFOO-Dlj40',
+        appId: '1:629553534814:android:c05fa4f5a6e40735a9a1cf',
+        messagingSenderId: '629553534814',
+        projectId: 'carrot-foodelivery',
+      ));
+      MetaSEO().config();
+    } else if (GetPlatform.isAndroid) {
+      await Firebase.initializeApp(
         options: const FirebaseOptions(
-      apiKey: 'AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA',
-      appId: '1:491987943015:android:fe79b69339834d5c8f1ec2',
-      messagingSenderId: '491987943015',
-      projectId: 'stackmart-500c7',
-    ));
-    MetaSEO().config();
-  } else if (GetPlatform.isAndroid) {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyCc3OCd5I2xSlnftZ4bFAbuCzMhgQHLivA',
-        appId: '1:491987943015:android:fe79b69339834d5c8f1ec2',
-        messagingSenderId: '491987943015',
-        projectId: 'stackmart-500c7',
-      ),
-    );
-  } else {
-    await Firebase.initializeApp();
+          apiKey: 'AIzaSyAeBvXjTdJGACPYEGfXBThsOiFOO-Dlj40',
+          appId: '1:629553534814:android:c05fa4f5a6e40735a9a1cf',
+          messagingSenderId: '629553534814',
+          projectId: 'carrot-foodelivery',
+        ),
+      );
+    } else {
+      await Firebase.initializeApp();
+    }
+
+    // Get and print FCM token
+    if (GetPlatform.isMobile) {
+      String? token = await NotificationHelper.getFCMToken();
+      print('FCM Token: $token');
+    }
+  } catch (e) {
+    print('Firebase initialization error: $e');
   }
 
   Map<String, Map<String, String>> languages = await di.init();
@@ -83,6 +93,15 @@ Future<void> main() async {
       }
       await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
       FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+
+      // Listen for token refresh and update backend
+      FirebaseMessaging.instance.onTokenRefresh.listen((token) {
+        print('FCM Token Refreshed: $token');
+        // Update token in backend when user is logged in
+        if (Get.find<AuthController>().isLoggedIn()) {
+          Get.find<AuthController>().updateToken();
+        }
+      });
     }
   } catch (_) {}
 
@@ -136,6 +155,28 @@ class _MyAppState extends State<MyApp> {
         Get.find<AuthController>().updateToken();
         await Get.find<FavouriteController>().getFavouriteList();
       }
+    }
+  }
+
+  // Add a test function to show a notification manually
+  static Future<void> showTestNotification() async {
+    if (flutterLocalNotificationsPlugin != null) {
+      const AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+        'stackfood',
+        'stackfood',
+        playSound: true,
+        importance: Importance.max,
+        priority: Priority.max,
+        sound: RawResourceAndroidNotificationSound('notification'),
+      );
+      const NotificationDetails platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(0, 'Test Notification',
+          'This is a test notification', platformChannelSpecifics);
+      print('Test notification triggered');
+    } else {
+      print('Flutter local notifications plugin is not initialized');
     }
   }
 
