@@ -94,6 +94,16 @@ Future<void> main() async {
       await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
       FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
 
+      // Get and print FCM token
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      print('==========================FCM Token: $fcmToken');
+
+      // Print bearer token if user is logged in
+      if (Get.find<AuthController>().isLoggedIn()) {
+        String? bearerToken = Get.find<AuthController>().getUserToken();
+        print('Bearer Token: $bearerToken');
+      }
+
       // Listen for token refresh and update backend
       FirebaseMessaging.instance.onTokenRefresh.listen((token) {
         print('FCM Token Refreshed: $token');
@@ -103,7 +113,9 @@ Future<void> main() async {
         }
       });
     }
-  } catch (_) {}
+  } catch (e) {
+    print('Error in notification setup: $e');
+  }
 
   if (ResponsiveHelper.isWeb()) {
     await FacebookAuth.instance.webAndDesktopInitialize(

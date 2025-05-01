@@ -120,11 +120,6 @@ class AuthRepo implements AuthRepoInterface<SignUpBodyModel> {
         debugPrint('Error getting device token: $e');
       }
     }
-    if (deviceToken != null && deviceToken != '@') {
-      debugPrint('--------Device Token---------- $deviceToken');
-    } else {
-      debugPrint('Failed to get device token');
-    }
     return deviceToken;
   }
 
